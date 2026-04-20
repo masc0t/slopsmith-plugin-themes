@@ -14,7 +14,7 @@ docker compose restart
 
 ## Other Plugins
 
-- [Midi Capo](https://github.com/masc0t/slopsmith-plugin-midi-capo) - Transpose MIDI input on the fly.
+- [Midi Capo](https://github.com/masc0t/slopsmith-plugin-midi-capo) — Transpose MIDI input on the fly.
 - [Find More Songs](https://github.com/masc0t/slopsmith-plugin-find-more) — search CustomsForge for more songs by an artist and find more songs to add to your collection
 - [Invert Highway](https://github.com/masc0t/slopsmith-plugin-invert-highway) — flip the chord note stacking order on the highway
 
