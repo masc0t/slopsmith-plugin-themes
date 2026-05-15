@@ -9,4 +9,119 @@
         </div>
         <p class="text-[11px] text-gray-600 mt-2 italic">Settings are saved to the server.</p>
     </div>
+
+    <div id="custom-theme-controls" class="hidden border-t border-gray-800 pt-4 mt-2 space-y-3">
+        <div class="flex items-center justify-between">
+            <label class="text-xs font-medium text-gray-400 uppercase tracking-wider">Accent Color</label>
+            <input type="color" id="custom-accent-picker" class="w-8 h-8 rounded-lg cursor-pointer bg-dark-700 border border-gray-600 p-0 overflow-hidden" oninput="window.themes && window.themes.updateCustom('accent', this.value)">
+        </div>
+        <div class="flex items-center justify-between">
+            <label class="text-xs font-medium text-gray-400 uppercase tracking-wider">Background</label>
+            <input type="color" id="custom-bg-picker" class="w-8 h-8 rounded-lg cursor-pointer bg-dark-700 border border-gray-600 p-0 overflow-hidden" oninput="window.themes && window.themes.updateCustom('bg900', this.value)">
+        </div>
+
+        <div class="pt-2">
+            <button type="button" 
+                onclick="const el = document.getElementById('advanced-colors'); el.classList.toggle('hidden'); this.textContent = el.classList.contains('hidden') ? 'Show all colors' : 'Hide individual colors'" 
+                class="text-[10px] text-accent hover:text-accent-light uppercase font-bold tracking-widest transition-colors">
+                Show all colors
+            </button>
+        </div>
+
+        <div id="advanced-colors" class="hidden space-y-4 pt-4 border-t border-gray-800/50">
+            <div class="space-y-2">
+                <p class="text-[10px] text-gray-500 uppercase font-bold tracking-tight">Background Shades</p>
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="flex items-center justify-between bg-dark-800/50 p-2 rounded-lg border border-gray-800">
+                        <span class="text-[11px] text-gray-400">BG 800</span>
+                        <input type="color" id="custom-bg800-picker" class="w-5 h-5 rounded-md cursor-pointer bg-transparent border-none p-0" oninput="window.themes && window.themes.updateCustom('bg800', this.value)">
+                    </div>
+                    <div class="flex items-center justify-between bg-dark-800/50 p-2 rounded-lg border border-gray-800">
+                        <span class="text-[11px] text-gray-400">BG 700</span>
+                        <input type="color" id="custom-bg700-picker" class="w-5 h-5 rounded-md cursor-pointer bg-transparent border-none p-0" oninput="window.themes && window.themes.updateCustom('bg700', this.value)">
+                    </div>
+                    <div class="flex items-center justify-between bg-dark-800/50 p-2 rounded-lg border border-gray-800">
+                        <span class="text-[11px] text-gray-400">BG 600</span>
+                        <input type="color" id="custom-bg600-picker" class="w-5 h-5 rounded-md cursor-pointer bg-transparent border-none p-0" oninput="window.themes && window.themes.updateCustom('bg600', this.value)">
+                    </div>
+                    <div class="flex items-center justify-between bg-dark-800/50 p-2 rounded-lg border border-gray-800">
+                        <span class="text-[11px] text-gray-400">BG 500</span>
+                        <input type="color" id="custom-bg500-picker" class="w-5 h-5 rounded-md cursor-pointer bg-transparent border-none p-0" oninput="window.themes && window.themes.updateCustom('bg500', this.value)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <p class="text-[10px] text-gray-500 uppercase font-bold tracking-tight">Accent Shades</p>
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="flex items-center justify-between bg-dark-800/50 p-2 rounded-lg border border-gray-800">
+                        <span class="text-[11px] text-gray-400">Light</span>
+                        <input type="color" id="custom-accentLight-picker" class="w-5 h-5 rounded-md cursor-pointer bg-transparent border-none p-0" oninput="window.themes && window.themes.updateCustom('accentLight', this.value)">
+                    </div>
+                    <div class="flex items-center justify-between bg-dark-800/50 p-2 rounded-lg border border-gray-800">
+                        <span class="text-[11px] text-gray-400">Dark</span>
+                        <input type="color" id="custom-accentDark-picker" class="w-5 h-5 rounded-md cursor-pointer bg-transparent border-none p-0" oninput="window.themes && window.themes.updateCustom('accentDark', this.value)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <p class="text-[10px] text-gray-500 uppercase font-bold tracking-tight">Typography</p>
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="flex items-center justify-between bg-dark-800/50 p-2 rounded-lg border border-gray-800">
+                        <span class="text-[11px] text-gray-400">Primary</span>
+                        <input type="color" id="custom-textPrimary-picker" class="w-5 h-5 rounded-md cursor-pointer bg-transparent border-none p-0" oninput="window.themes && window.themes.updateCustom('textPrimary', this.value)">
+                    </div>
+                    <div class="flex items-center justify-between bg-dark-800/50 p-2 rounded-lg border border-gray-800">
+                        <span class="text-[11px] text-gray-400">Secondary</span>
+                        <input type="color" id="custom-textSecondary-picker" class="w-5 h-5 rounded-md cursor-pointer bg-transparent border-none p-0" oninput="window.themes && window.themes.updateCustom('textSecondary', this.value)">
+                    </div>
+                    <div class="flex items-center justify-between bg-dark-800/50 p-2 rounded-lg border border-gray-800">
+                        <span class="text-[11px] text-gray-400">Muted</span>
+                        <input type="color" id="custom-textMuted-picker" class="w-5 h-5 rounded-md cursor-pointer bg-transparent border-none p-0" oninput="window.themes && window.themes.updateCustom('textMuted', this.value)">
+                    </div>
+                    <div class="flex items-center justify-between bg-dark-800/50 p-2 rounded-lg border border-gray-800">
+                        <span class="text-[11px] text-gray-400">Gold</span>
+                        <input type="color" id="custom-gold-picker" class="w-5 h-5 rounded-md cursor-pointer bg-transparent border-none p-0" oninput="window.themes && window.themes.updateCustom('gold', this.value)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <p class="text-[10px] text-gray-500 uppercase font-bold tracking-tight">UI Elements</p>
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="flex items-center justify-between bg-dark-800/50 p-2 rounded-lg border border-gray-800">
+                        <span class="text-[11px] text-gray-400">Border</span>
+                        <input type="color" id="custom-border-picker" class="w-5 h-5 rounded-md cursor-pointer bg-transparent border-none p-0" oninput="window.themes && window.themes.updateCustom('border', this.value)">
+                    </div>
+                    <div class="flex items-center justify-between bg-dark-800/50 p-2 rounded-lg border border-gray-800">
+                        <span class="text-[11px] text-gray-400">Player BG</span>
+                        <input type="color" id="custom-playerBg-picker" class="w-5 h-5 rounded-md cursor-pointer bg-transparent border-none p-0" oninput="window.themes && window.themes.updateCustom('playerBg', this.value)">
+                    </div>
+                    <div class="flex items-center justify-between bg-dark-800/50 p-2 rounded-lg border border-gray-800">
+                        <span class="text-[11px] text-gray-400">Scrollbar</span>
+                        <input type="color" id="custom-scrollThumb-picker" class="w-5 h-5 rounded-md cursor-pointer bg-transparent border-none p-0" oninput="window.themes && window.themes.updateCustom('scrollThumb', this.value)">
+                    </div>
+                    <div class="flex items-center justify-between bg-dark-800/50 p-2 rounded-lg border border-gray-800">
+                        <span class="text-[11px] text-gray-400">Scroll Hover</span>
+                        <input type="color" id="custom-scrollThumbHover-picker" class="w-5 h-5 rounded-md cursor-pointer bg-transparent border-none p-0" oninput="window.themes && window.themes.updateCustom('scrollThumbHover', this.value)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <p class="text-[10px] text-gray-500 uppercase font-bold tracking-tight">Song Cards</p>
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="flex items-center justify-between bg-dark-800/50 p-2 rounded-lg border border-gray-800">
+                        <span class="text-[11px] text-gray-400">Gradient Start</span>
+                        <input type="color" id="custom-cardFromRgb-picker" class="w-5 h-5 rounded-md cursor-pointer bg-transparent border-none p-0" oninput="window.themes && window.themes.updateCustom('cardFromRgb', this.value)">
+                    </div>
+                    <div class="flex items-center justify-between bg-dark-800/50 p-2 rounded-lg border border-gray-800">
+                        <span class="text-[11px] text-gray-400">Gradient End</span>
+                        <input type="color" id="custom-cardToRgb-picker" class="w-5 h-5 rounded-md cursor-pointer bg-transparent border-none p-0" oninput="window.themes && window.themes.updateCustom('cardToRgb', this.value)">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

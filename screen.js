@@ -203,6 +203,18 @@
                 cardFromRgb: '#14141d', cardToRgb: '#0d0d12', playerBg: '#0d0d12',
             },
         },
+        'custom': {
+            name: 'Custom',
+            desc: 'Your own personalized color scheme.',
+            swatches: ['#0a0a0a', '#121212', '#4080e0', '#ffffff'],
+            colors: {
+                bg900: '#0a0a0a', bg800: '#121212', bg700: '#1a1a1a', bg600: '#222222', bg500: '#2a2a2a',
+                accent: '#4080e0', accentLight: '#60a0ff', accentDark: '#2060b0',
+                gold: '#ffffff', textPrimary: '#e1e1e6', textSecondary: '#9ca3af', textMuted: '#6b7280',
+                border: '#2a2a2a', scrollThumb: '#252525', scrollThumbHover: '#353535',
+                cardFromRgb: '#121212', cardToRgb: '#0a0a0a', playerBg: '#0a0a0a',
+            },
+        },
     };
 
     const CONFIG = {
@@ -342,6 +354,28 @@ html[data-sm-theme] ::-webkit-scrollbar-thumb:hover { background: rgb(var(--sm-s
     }
 
     /**
+     * Lightens or darkens a hex color.
+     * @param {string} col
+     * @param {number} amt
+     * @returns {string}
+     */
+    function lightenDarkenColor(col, amt) {
+        let usePound = false;
+        if (col[0] === "#") {
+            col = col.slice(1);
+            usePound = true;
+        }
+        let num = parseInt(col, 16);
+        let r = (num >> 16) + amt;
+        if (r > 255) r = 255; else if (r < 0) r = 0;
+        let g = ((num >> 8) & 0x00FF) + amt;
+        if (g > 255) g = 255; else if (g < 0) g = 0;
+        let b = (num & 0x0000FF) + amt;
+        if (b > 255) b = 255; else if (b < 0) b = 0;
+        return (usePound ? "#" : "") + (b | (g << 8) | (r << 16)).toString(16).padStart(6, '0');
+    }
+
+    /**
      * Applies a theme by updating the style tag and document attribute.
      * @param {string} id 
      * @param {boolean} persist - Whether to save the choice to the server.
@@ -363,12 +397,32 @@ html[data-sm-theme] ::-webkit-scrollbar-thumb:hover { background: rgb(var(--sm-s
         
         renderPicker(id);
         syncQuickPick(id);
+
+        const customControls = document.getElementById('custom-theme-controls');
+        if (customControls) {
+            customControls.classList.toggle('hidden', id !== 'custom');
+            if (id === 'custom') {
+                const colors = PRESETS.custom.colors;
+                for (const key in colors) {
+                    const el = document.getElementById(`custom-${key}-picker`);
+                    if (el) el.value = colors[key];
+                }
+                // Sync the basic pickers too
+                const ap = document.getElementById('custom-accent-picker');
+                const bp = document.getElementById('custom-bg-picker');
+                if (ap) ap.value = colors.accent;
+                if (bp) bp.value = colors.bg900;
+            }
+        }
         
         if (persist) {
+            const body = { active: id };
+            if (id === 'custom') body.custom = PRESETS.custom.colors;
+
             fetch(CONFIG.API_PATH, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ active: id }),
+                body: JSON.stringify(body),
             }).catch(err => console.error('Failed to persist theme:', err));
         }
     }
@@ -441,9 +495,20 @@ html[data-sm-theme] ::-webkit-scrollbar-thumb:hover { background: rgb(var(--sm-s
     fetch(CONFIG.API_PATH)
         .then(r => r.ok ? r.json() : null)
         .then(cfg => {
-            if (cfg && cfg.active && PRESETS[cfg.active]) {
-                if (cfg.active !== document.documentElement.getAttribute('data-sm-theme')) {
-                    applyTheme(cfg.active, false);
+            if (cfg) {
+                if (cfg.custom && PRESETS.custom) {
+                    Object.assign(PRESETS.custom.colors, cfg.custom);
+                    PRESETS.custom.swatches = [
+                        PRESETS.custom.colors.bg900,
+                        PRESETS.custom.colors.bg800,
+                        PRESETS.custom.colors.accent,
+                        '#ffffff'
+                    ];
+                }
+                if (cfg.active && PRESETS[cfg.active]) {
+                    if (cfg.active !== document.documentElement.getAttribute('data-sm-theme')) {
+                        applyTheme(cfg.active, false);
+                    }
                 }
             }
         })
@@ -451,8 +516,7 @@ html[data-sm-theme] ::-webkit-scrollbar-thumb:hover { background: rgb(var(--sm-s
         .finally(() => {
             // Ensure UI is initialized even if network fails
             const current = document.documentElement.getAttribute('data-sm-theme') || CONFIG.DEFAULT_ID;
-            renderPicker(current);
-            syncQuickPick(current);
+            applyTheme(current, false); // Call applyTheme to ensure custom controls visibility
         });
 
     // Public API
@@ -460,5 +524,26 @@ html[data-sm-theme] ::-webkit-scrollbar-thumb:hover { background: rgb(var(--sm-s
         apply: applyTheme,
         list: () => Object.keys(PRESETS).map(id => ({ id, ...PRESETS[id] })),
         active: () => document.documentElement.getAttribute('data-sm-theme') || CONFIG.DEFAULT_ID,
+        updateCustom: (key, val) => {
+            const c = PRESETS.custom.colors;
+            c[key] = val;
+            if (key === 'accent') {
+                c.accentLight = lightenDarkenColor(val, 40);
+                c.accentDark = lightenDarkenColor(val, -40);
+            } else if (key === 'bg900') {
+                c.bg800 = lightenDarkenColor(val, 8);
+                c.bg700 = lightenDarkenColor(val, 16);
+                c.bg600 = lightenDarkenColor(val, 24);
+                c.bg500 = lightenDarkenColor(val, 32);
+                c.cardFromRgb = c.bg800;
+                c.cardToRgb = c.bg900;
+                c.playerBg = c.bg900;
+                c.border = lightenDarkenColor(val, 20);
+                c.scrollThumb = lightenDarkenColor(val, 25);
+                c.scrollThumbHover = lightenDarkenColor(val, 40);
+            }
+            PRESETS.custom.swatches = [c.bg900, c.bg800, c.accent, '#ffffff'];
+            applyTheme('custom', true);
+        }
     };
 })();
