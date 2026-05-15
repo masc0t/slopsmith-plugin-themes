@@ -1,7 +1,7 @@
 {
   "id": "themes",
   "name": "Themes",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "script": "screen.js",
   "settings": { "html": "settings.html" },
   "routes": "routes.py"
